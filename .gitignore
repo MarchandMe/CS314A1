@@ -1,0 +1,6 @@
+.vscode/
+
+
+*.cmi
+*.cmo
+*.byte
