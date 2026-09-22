@@ -22,7 +22,10 @@ Problem 2
 Write a function number_in_month that takes a list of dates and a month (i.e., an int) and returns
 how many dates in the list are in the given month.
 *)
-let number_in_month (dates : (int * int * int) list) (month: int) = 0
+let rec number_in_month (dates : (int * int * int) list) (target: int) = 
+    if dates = [] then 0
+    else if month (List.hd dates) = target then 1 + number_in_month (List.tl dates) target
+    else number_in_month (List.tl dates) target
 
 (*
 Problem 3
@@ -30,7 +33,9 @@ Write a function number_in_months that takes a list of dates and a list of month
 and returns the number of dates in the list of dates that are in any of the months in the list of months.
 Assume the list of months has no number repeated. Hint: Use your answer to the previous problem.
 *)
-let number_in_months (dates : (int * int * int) list) (months: (int) list) = 0
+let rec number_in_months (dates : (int * int * int) list) (targets: (int) list) = 
+    if targets = [] then 0
+    else number_in_month dates (List.hd targets) + number_in_months dates (List.tl targets)
 
 (*
 Problem 4
@@ -38,7 +43,10 @@ Write a function dates_in_month that takes a list of dates and a month (i.e., an
 list holding the dates from the argument list of dates that are in the month. The returned list should
 contain dates in the order they were originally given.
 *)
-let dates_in_month (dates : (int * int * int) list) (month: int) = []
+let rec dates_in_month (dates : (int * int * int) list) (target: int) = 
+    if dates = [] then []
+    else if month (List.hd dates) = target then (List.hd dates)::(dates_in_month (List.tl dates) target)
+    else (dates_in_month (List.tl dates) target)
 
 (*
 Problem 5
@@ -47,7 +55,9 @@ and returns a list holding the dates from the argument list of dates that are in
 the list of months. Assume the list of months has no number repeated. Hint: Use your answer to the
 previous problem and OCaml’s list-append operator (@).
 *)
-let dates_in_month (dates : (int * int * int) list) (months: (int) list) = []
+let rec dates_in_months (dates : (int * int * int) list) (targets: (int) list) = 
+    if targets = [] then []
+    else (dates_in_months dates (List.tl targets) )@(dates_in_month dates (List.hd targets))
 
 (*
 Problem 6
