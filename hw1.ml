@@ -12,12 +12,14 @@ I never thought one could hate parantheses so! It cramps my hands.
 ocaml does force readable code though, in a strange way. I'm not quite sure I like it.
 
 Et tu, Tuple?
+
+I am stupid. I can not read.
 *)
 
 
 (*Helper Func*)
-let month (x,_,_) = x (* gets the first element of a triple *)
-let day (_,x,_) = x (* gets the second element of a triple *)
+let day (x,_,_) = x (* gets the first element of a triple *)
+let month (_,x,_) = x (* gets the second element of a triple *)
 let year (_,_,x) = x (* gets the third element of a triple *)
 
 (*
