@@ -1,5 +1,14 @@
 open Hw1
 
+(*Testing Func*)
+let rec print_dates_list (dates: (int * int * int) list) = 
+    if dates = [] then Printf.printf "\n"
+    else (Printf.printf "(%d, %d, %d), " (month (List.hd dates)) (day (List.hd dates)) (year (List.hd dates)) ; print_dates_list(List.tl dates))
+
+let rec print_int_list (nums : int list) =
+    if nums = [] then Printf.printf "\n"
+    else (Printf.printf "%d, " (List.hd nums) ; print_int_list (List.tl nums)) 
+
 let test_dates = [
     (1, 5, 2024); (2, 10, 2023); (1, 20, 2025);
     (12, 31, 2023); (2, 29, 2024); (6, 15, 2022);

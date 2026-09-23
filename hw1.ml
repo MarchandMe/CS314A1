@@ -161,9 +161,22 @@ Write functions number_in_months_challenge and dates_in_months_challenge
 that are like your solutions to problems 3 and 5 except having a month in the second argument multiple
 times has no more effect than having it once. (Hint: Remove duplicates, then use previous work.)
 *)
-let number_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) = 0
+(*dumbest way possible, but it works*)
+let rec helper_is_in_list (nums : int list) (target : int) : bool = 
+    if (nums = []) then false
+    else if (List.hd nums) = target then true
+    else helper_is_in_list (List.tl nums) (target)
 
-let rec dates_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) = 0
+let rec helper_remove_duplicate_months (months : int list) : int list = 
+    if (months = []) then []
+    else if (helper_is_in_list (List.tl months) (List.hd months)) then helper_remove_duplicate_months (List.tl months)
+    else (List.hd months)::helper_remove_duplicate_months (List.tl months)
+
+let number_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) : int = 
+    number_in_months dates (helper_remove_duplicate_months targets)
+
+let dates_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) : (int * int * int) list = 
+    dates_in_months dates (helper_remove_duplicate_months targets)
 
 
 (*
@@ -179,13 +192,14 @@ let helper_is_leap_year (date : int * int * int) : bool =
     else if year(date) mod 100 != 0 && year(date) mod 4 = 0 then true
     else false
 
-let reasonable_date (date : int * int * int) : bool = false
+let helper_is_appropriate_day (date : int * int * int) : bool = 
+    if ((month date) = 1 || (month date) = 3 || (month date) = 5 || (month date) = 7 || (month date) = 8 || (month date) = 10 || (month date) = 12) then (0 < (day date))&& ((day date) <= 31)
+    else if ((month date) = 4 || (month date) = 6 || (month date) = 9 || (month date) = 11) then (0 < (day date))&& ((day date) <= 30)
+    else if (helper_is_leap_year date) then (0 < (day date))&& ((day date) <= 29)
+    else (0 < (day date))&& ((day date) <= 28)
 
-(*Testing Func*)
-let rec print_dates_list (dates: (int * int * int) list) = 
-    if dates = [] then Printf.printf "\n"
-    else (Printf.printf "(%d, %d, %d), " (month (List.hd dates)) (day (List.hd dates)) (year (List.hd dates)) ; print_dates_list(List.tl dates))
-
-let rec print_int_list (nums : int list) =
-    if nums = [] then Printf.printf "\n"
-    else (Printf.printf "%d, " (List.hd nums) ; print_int_list (List.tl nums)) 
+let reasonable_date (date : int * int * int) : bool = 
+    if (0 >= (year date)) then false
+    else if (0 >= (month date)) || ((month date) > 12) then false
+    else if (not (helper_is_appropriate_day date)) then false
+    else true
