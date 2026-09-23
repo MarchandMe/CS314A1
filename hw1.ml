@@ -142,9 +142,10 @@ evaluates to None if the list has no dates else Some d where the date d is the o
 *)
 let rec oldest (dates : (int * int * int) list) : (int * int * int) option = 
     if dates = [] then None
-    else if (Option.is_none (oldest (List.tl dates))) then (Some (List.hd dates))
-    else if (is_older ((List.hd dates), (Option.get (oldest (List.tl dates))))) then (Some (List.hd dates))
-    else (oldest (List.tl dates))
+    else let cur_oldest = (oldest (List.tl dates)) in
+        if (Option.is_none cur_oldest) then (Some (List.hd dates))
+        else if (is_older ((List.hd dates), (Option.get cur_oldest))) then (Some (List.hd dates))
+        else cur_oldest
 
 (*
 Problem 12
