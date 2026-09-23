@@ -65,6 +65,7 @@ Write a function get_nth that takes a list of strings and a positive int n and r
 of the list where the head of the list is 1st. Do not worry about the case where the list has too few
 elements: your function may apply List.hd or List.tl to the empty list in this case, which is okay.
 *)
+let get_nth (strings : string list) (index : int) = ""
 
 (*
 Problem 7
@@ -75,6 +76,9 @@ Instead, use a list holding 12 strings and your answer to the previous problem. 
 hyphens exactly as in the example and use English month names: January, February, March, April,
 May, June, July, August, September, October, November, December.
 *)
+(*months list*)
+let month_names = ["January"; "February"; "March"; "April"; "May"; "June"; "July"; "August"; "September"; "October"; "November"; "December"]
+let string_of_date (date : int * int * int) = ""
 
 (*
 Problem 8
@@ -84,6 +88,7 @@ You should return an int n such that the first n elements of the list add to les
 n + 1 elements of the list add to sum or more. Assume the entire list sums to more than the passed in
 value; it is okay for an exception to occur if this is not the case.
 *)
+let number_before_reaching_sum (sum : int) (nums : int list) = 0
 
 (*
 Problem 9
@@ -91,6 +96,8 @@ Write a function what_month that takes a day of year (i.e., an int between 1 and
 what month that day is in (1 for January, 2 for February, etc.). Use a list holding 12 integers and your
 answer to the previous problem.
 *)
+let days_in_month = [31; 28; 31; 30; 31; 30; 31; 31; 30; 31; 30; 31]
+let what_month (day : int) = 0
 
 (*
 Problem 10
@@ -98,12 +105,14 @@ Write a function month_range that takes two days of the year day1 and day2 and r
 [m1;m2;...;mn] where m1 is the month of day1, m2 is the month of day1+1, . . . , and mn is the month
 of day day2. Note the result will have length day2 - day1 + 1 or length 0 if day1 > day2.
 *)
+let month_range (day1 : int) (day2 : int) = []
 
 (*
 Problem 11
 Write a function oldest that takes a list of dates and evaluates to an (int*int*int) option. It
 evaluates to None if the list has no dates else Some d where the date d is the oldest date in the list.
 *)
+let oldest (dates : (int * int * int) list) = 0
 
 (*
 Problem 12
@@ -111,6 +120,7 @@ Write a function cumulative_sum that takes a list of numbers and returns a list 
 of these numbers. For example, cumulative_sum [12;27;13] = [12;39;52]. Hint: Use a helper
 function that takes two arguments.
 *)
+let cumulative_sum (nums : int list) = []
 
 (*
 Problem 13 (Challenge)
@@ -118,6 +128,10 @@ Write functions number_in_months_challenge and dates_in_months_challenge
 that are like your solutions to problems 3 and 5 except having a month in the second argument multiple
 times has no more effect than having it once. (Hint: Remove duplicates, then use previous work.)
 *)
+let number_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) = 0
+
+let rec dates_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) = 0
+
 
 (*
 Problem 14 (Challenge)
@@ -127,3 +141,34 @@ month between 1 and 12, and a day appropriate for the month. Solutions should pr
 years. Leap years are years that are either divisible by 400 or divisible by 4 but not divisible by 100.
 (Do not worry about days possibly lost in the conversion to the Gregorian calendar in the Late 1500s.)
 *)
+let helper_is_leap_year (date : int * int * int) : bool =
+    if year(date) mod 400 = 0 then true
+    else if year(date) mod 100 != 0 && year(date) mod 4 = 0 then true
+    else false
+
+let reasonable_date (date : int * int * int) : bool = false
+
+(*Testing Func*)
+let rec print_dates_list (dates: (int * int * int) list) = 
+    if dates = [] then Printf.printf "\n"
+    else (Printf.printf "(%d, %d, %d), " (month (List.hd dates)) (day (List.hd dates)) (year (List.hd dates)) ; print_dates_list(List.tl dates))
+
+
+
+let test_dates = [
+    (1, 5, 2024); (2, 10, 2023); (1, 20, 2025);
+    (12, 31, 2023); (2, 29, 2024); (6, 15, 2022);
+    (1, 1, 2024); (9, 22, 2026); (2, 28, 2025)
+]
+let test_months = [1;2]
+
+let () =
+    Printf.printf "is_older: %b \n" (is_older (12, 31, 2023) (1, 1, 2024));
+
+    Printf.printf "number_in_month: %d \n" (number_in_month test_dates 1);
+
+    Printf.printf "number_in_months: %d \n" (number_in_months test_dates [1; 2]);
+
+    print_dates_list (dates_in_month test_dates 1);
+
+    print_dates_list (dates_in_months test_dates test_months);
