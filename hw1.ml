@@ -10,6 +10,8 @@ it requires me to plan out my code before I write it, which is both a boon and v
 I never thought one could hate parantheses so! It cramps my hands.
 
 ocaml does force readable code though, in a strange way. I'm not quite sure I like it.
+
+Et tu, Tuple?
 *)
 
 
@@ -24,7 +26,7 @@ Write a function is_older that takes two dates and evaluates to true or false. I
 the first argument is a date that comes before the second argument. (If the two dates are the same,
 the result is false.)
 *)
-let is_older (d1: int * int * int ) (d2: int * int * int) : bool = 
+let is_older ((d1: int * int * int ), (d2: int * int * int)) : bool = 
     if year d1 < year d2 then true
     else if year d1 = year d2 && month d1 < month d2 then true
     else if year d1 = year d2 && month d1 = month d2 && day d1 < day d2 then true
@@ -35,10 +37,10 @@ Problem 2
 Write a function number_in_month that takes a list of dates and a month (i.e., an int) and returns
 how many dates in the list are in the given month.
 *)
-let rec number_in_month (dates : (int * int * int) list) (target: int) : int = 
+let rec number_in_month ((dates : (int * int * int) list), (target: int)) : int = 
     if dates = [] then 0
-    else if month (List.hd dates) = target then 1 + number_in_month (List.tl dates) target
-    else number_in_month (List.tl dates) target
+    else if month (List.hd dates) = target then 1 + number_in_month ((List.tl dates), target)
+    else number_in_month ((List.tl dates), target)
 
 (*
 Problem 3
@@ -46,9 +48,9 @@ Write a function number_in_months that takes a list of dates and a list of month
 and returns the number of dates in the list of dates that are in any of the months in the list of months.
 Assume the list of months has no number repeated. Hint: Use your answer to the previous problem.
 *)
-let rec number_in_months (dates : (int * int * int) list) (targets: (int) list) : int = 
+let rec number_in_months ((dates : (int * int * int) list), (targets: (int) list)) : int = 
     if targets = [] then 0
-    else number_in_month dates (List.hd targets) + number_in_months dates (List.tl targets)
+    else number_in_month (dates, (List.hd targets)) + number_in_months (dates, (List.tl targets))
 
 (*
 Problem 4
@@ -56,10 +58,10 @@ Write a function dates_in_month that takes a list of dates and a month (i.e., an
 list holding the dates from the argument list of dates that are in the month. The returned list should
 contain dates in the order they were originally given.
 *)
-let rec dates_in_month (dates : (int * int * int) list) (target: int) : (int * int * int) list = 
+let rec dates_in_month ((dates : (int * int * int) list), (target: int)) : (int * int * int) list = 
     if dates = [] then []
-    else if month (List.hd dates) = target then (List.hd dates)::(dates_in_month (List.tl dates) target)
-    else (dates_in_month (List.tl dates) target)
+    else if month (List.hd dates) = target then (List.hd dates)::(dates_in_month ((List.tl dates), target))
+    else (dates_in_month ((List.tl dates), target))
 
 (*
 Problem 5
@@ -68,9 +70,9 @@ and returns a list holding the dates from the argument list of dates that are in
 the list of months. Assume the list of months has no number repeated. Hint: Use your answer to the
 previous problem and OCaml’s list-append operator (@).
 *)
-let rec dates_in_months (dates : (int * int * int) list) (targets: (int) list) : (int * int * int) list = 
+let rec dates_in_months ((dates : (int * int * int) list), (targets: (int) list)) : (int * int * int) list = 
     if targets = [] then []
-    else (dates_in_month dates (List.hd targets))@(dates_in_months dates (List.tl targets))
+    else (dates_in_month (dates, (List.hd targets)))@(dates_in_months (dates, (List.tl targets)))
 
 (*
 Problem 6
@@ -78,9 +80,9 @@ Write a function get_nth that takes a list of strings and a positive int n and r
 of the list where the head of the list is 1st. Do not worry about the case where the list has too few
 elements: your function may apply List.hd or List.tl to the empty list in this case, which is okay.
 *)
-let rec get_nth (strings : string list) (index : int) : string = 
+let rec get_nth ((strings : string list), (index : int)) : string = 
     if index = 1 then (List.hd strings)
-    else get_nth (List.tl strings) (index - 1)
+    else get_nth ((List.tl strings), (index - 1))
 
 (*
 Problem 7
@@ -94,7 +96,7 @@ May, June, July, August, September, October, November, December.
 (*months list*)
 let month_names = ["January"; "February"; "March"; "April"; "May"; "June"; "July"; "August"; "September"; "October"; "November"; "December"]
 let string_of_date (date : int * int * int) : string = 
-    (get_nth month_names (month date)) ^ "-" ^ (string_of_int (day date)) ^ "-" ^ (string_of_int (year date))
+    (get_nth (month_names, (month date))) ^ "-" ^ (string_of_int (day date)) ^ "-" ^ (string_of_int (year date))
 
 (*
 Problem 8
@@ -108,7 +110,7 @@ let rec number_before_reaching_sum_helper (sum : int) (nums : int list) (index :
     if sum <= (List.hd nums) then index
     else number_before_reaching_sum_helper (sum - (List.hd nums)) (List.tl nums) (index + 1)
 
-let number_before_reaching_sum (sum : int) (nums : int list) : int= 
+let number_before_reaching_sum ((sum : int), (nums : int list)) : int= 
     (number_before_reaching_sum_helper sum nums 0)
 
 (*
@@ -119,7 +121,7 @@ answer to the previous problem.
 *)
 let days_in_month = [31; 28; 31; 30; 31; 30; 31; 31; 30; 31; 30; 31]
 let what_month (day : int) : int = 
-    1 + (number_before_reaching_sum day days_in_month)
+    1 + (number_before_reaching_sum (day, days_in_month))
 
 (*
 Problem 10
@@ -127,9 +129,9 @@ Write a function month_range that takes two days of the year day1 and day2 and r
 [m1;m2;...;mn] where m1 is the month of day1, m2 is the month of day1+1, . . . , and mn is the month
 of day day2. Note the result will have length day2 - day1 + 1 or length 0 if day1 > day2.
 *)
-let rec month_range (day1 : int) (day2 : int) : (int list) = 
+let rec month_range ((day1 : int), (day2 : int)) : (int list) = 
     if day1 > day2 then []
-    else (what_month day1)::(month_range (day1 + 1) day2)
+    else (what_month day1)::(month_range ((day1 + 1), day2))
 
 (*
 Problem 11
@@ -139,7 +141,7 @@ evaluates to None if the list has no dates else Some d where the date d is the o
 let rec oldest (dates : (int * int * int) list) : (int * int * int) option = 
     if dates = [] then None
     else if (Option.is_none (oldest (List.tl dates))) then (Some (List.hd dates))
-    else if (is_older (List.hd dates) (Option.get (oldest (List.tl dates)))) then (Some (List.hd dates))
+    else if (is_older ((List.hd dates), (Option.get (oldest (List.tl dates))))) then (Some (List.hd dates))
     else (oldest (List.tl dates))
 
 (*
@@ -172,11 +174,11 @@ let rec helper_remove_duplicate_months (months : int list) : int list =
     else if (helper_is_in_list (List.tl months) (List.hd months)) then helper_remove_duplicate_months (List.tl months)
     else (List.hd months)::helper_remove_duplicate_months (List.tl months)
 
-let number_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) : int = 
-    number_in_months dates (helper_remove_duplicate_months targets)
+let number_in_months_challenge ((dates : (int * int * int) list), (targets: (int) list)) : int = 
+    number_in_months (dates, (helper_remove_duplicate_months targets))
 
-let dates_in_months_challenge (dates : (int * int * int) list) (targets: (int) list) : (int * int * int) list = 
-    dates_in_months dates (helper_remove_duplicate_months targets)
+let dates_in_months_challenge ((dates : (int * int * int) list), (targets: (int) list)) : (int * int * int) list = 
+    dates_in_months (dates, (helper_remove_duplicate_months targets))
 
 
 (*
